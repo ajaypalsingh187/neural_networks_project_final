@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Success Predictor</title>
+    <script>
+        async function predict() {
+            // Collect input values
+            const inputs = Array.from(document.querySelectorAll("input, select")).map(input => parseFloat(input.value));
+            
+            // Make a POST request to the prediction API
+            const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ features: inputs }),
+            });
+
+            // Process the response
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById("result").innerText = `Prediction: ${result.prediction}, Confidence: ${result.confidence.toFixed(2)}`;
+            } else {
+                document.getElementById("result").innerText = `Error: ${result.error}`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Student Success Predictor</h1>
+    <form id="predictor-form" onsubmit="event.preventDefault(); predict();">
+        <label for="first-term-gpa">First Term GPA (0.0 - 4.5):</label>
+        <input type="number" id="first-term-gpa" min="0" max="4.5" step="0.1" required><br>
+
+        <label for="second-term-gpa">Second Term GPA (0.0 - 4.5):</label>
+        <input type="number" id="second-term-gpa" min="0" max="4.5" step="0.1" required><br>
+
+        <label for="first-language">First Language:</label>
+        <select id="first-language" required>
+            <option value="1">English</option>
+            <option value="2">French</option>
+            <option value="3">Other</option>
+        </select><br>
+
+        <label for="funding">Funding:</label>
+        <select id="funding" required>
+            <option value="1">Apprentice_PS</option>
+            <option value="2">GPOG_FT</option>
+            <option value="3">Intl Offshore</option>
+            <option value="4">Intl Regular</option>
+            <option value="5">Intl Transfer</option>
+            <option value="6">Joint Program Ryerson</option>
+            <option value="7">Joint Program UTSC</option>
+            <option value="8">Second Career Program</option>
+            <option value="9">Work Safety Insurance Board</option>
+        </select><br>
+
+        <label for="school">School:</label>
+        <select id="school" required>
+            <option value="1">Advancement</option>
+            <option value="2">Business</option>
+            <option value="3">Communications</option>
+            <option value="4">Community and Health</option>
+            <option value="5">Hospitality</option>
+            <option value="6">Engineering</option>
+            <option value="7">Transportation</option>
+        </select><br>
+
+        <label for="fast-track">Fast Track:</label>
+        <select id="fast-track" required>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+        </select><br>
+
+        <label for="coop">Co-op:</label>
+        <select id="coop" required>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+        </select><br>
+
+        <label for="residency">Residency:</label>
+        <select id="residency" required>
+            <option value="1">Domestic</option>
+            <option value="2">International</option>
+        </select><br>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" required>
+            <option value="1">Female</option>
+            <option value="2">Male</option>
+            <option value="3">Neutral</option>
+        </select><br>
+
+        <label for="prev-education">Previous Education:</label>
+        <select id="prev-education" required>
+            <option value="1">High School</option>
+            <option value="2">Post Secondary</option>
+        </select><br>
+
+        <label for="age-group">Age Group:</label>
+        <select id="age-group" required>
+            <option value="1">0-18</option>
+            <option value="2">19-20</option>
+            <option value="3">21-25</option>
+            <option value="4">26-30</option>
+            <option value="5">31-35</option>
+            <option value="6">36-40</option>
+            <option value="7">41-50</option>
+            <option value="8">51-60</option>
+            <option value="9">61-65</option>
+            <option value="10">66+</option>
+        </select><br>
+
+        <label for="high-school-average">High School Average Mark (0.0 - 100.0):</label>
+        <input type="number" id="high-school-average" min="0" max="100" step="0.1" required><br>
+
+        <label for="math-score">Math Score (0.0 - 50.0):</label>
+        <input type="number" id="math-score" min="0" max="50" step="0.1" required><br>
+
+        <label for="english-grade">English Grade:</label>
+        <select id="english-grade" required>
+            <option value="1">Level-130</option>
+            <option value="2">Level-131</option>
+            <option value="3">Level-140</option>
+            <option value="4">Level-141</option>
+            <option value="5">Level-150</option>
+            <option value="6">Level-151</option>
+            <option value="7">Level-160</option>
+            <option value="8">Level-161</option>
+            <option value="9">Level-170</option>
+            <option value="10">Level-171</option>
+            <option value="11">Level-180</option>
+        </select><br>
+
+        <button type="submit">Predict</button>
+    </form>
+    <p id="result"></p>
+</body>
+</html>
